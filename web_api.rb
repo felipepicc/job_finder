@@ -1,16 +1,20 @@
 require 'httparty'
 require 'nokogiri'
+require 'sinatra'
 
-url = "https://www.indeed.com/jobs?q=software+engineer&l=Boca+Raton%2C+FL"
+get '/' do
+  job = params["job"]
+  url = "https://miami.craigslist.org/search/#{job}?s=0"
 
-response = HTTParty.get url
+  response = HTTParty.get url
 
-dom = Nokogiri::HTML(response.body)
+  dom = Nokogiri::HTML(response.body)
 
-job_title =
+  job_title =
 
-  dom.css('.jobtitle').map do |obj|
-    obj.content
-  end
+    dom.css('.hdrlnk').map do |el|
+      el.content
+    end
 
-p job_title
+  job_title
+end
